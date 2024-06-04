@@ -1,0 +1,3 @@
+class BaseOrganization:
+    def __init__(self):
+        ...

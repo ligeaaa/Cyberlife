@@ -1,0 +1,3 @@
+class BaseDna:
+    def __init__(self):
+        ...
