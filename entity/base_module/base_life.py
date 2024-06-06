@@ -1,31 +1,40 @@
 from __future__ import annotations
 
+import time
+
+from constants.entity_constants.entity_gender import NEUTER
 from entity.base_module.base_lifecycle import BaseLifecycle
 from entity.base_module.base_organization import BaseOrganization
 
 
 class BaseLife:
-    def __init__(self):
-        # life's age
-        self.age: float = 0
+    def __init__(self,
+                 maximum_age: float = None,
+                 gender: int = NEUTER,
+                 lifecycle: BaseLifecycle = None,
+                 birth_place: str = "place",
+                 productor: list[BaseLife] = None,
+                 name: str = "life",
+                 row_location: int = 0,
+                 col_location: int = 0):
         # life's maximum age
-        self.maximum_age: float = ...
+        self.maximum_age = maximum_age
         # life's gender
-        self.gender: int = ...
+        self.gender = gender
         # life's lifecycle
-        self.lifecycle: BaseLifecycle = ...
+        self.lifecycle = lifecycle
         # when life born
-        self.birth_date: float = ...
+        self.birth_time = time.time()
         # where life born
-        self.birth_place: str = ...
+        self.birth_place = birth_place
         # who or which produce this life
-        self.productor: list[BaseLife] = ...
+        self.productor = productor
         # life's name
-        self.name: str = ...
-        self.row_location = ...
-        self.col_location = ...
+        self.name = name
+        self.row_location = row_location
+        self.col_location = col_location
 
-    def absorbed_energy(self, organization: BaseOrganization = None, energy_resource = None):
+    def absorbed_energy(self, organization: BaseOrganization = None, energy_resource=None):
         """
         This is a function that allows this life absorb energy grom energy resource by some organization
         :param organization:
@@ -57,4 +66,3 @@ class BaseLife:
 
 if __name__ == '__main__':
     a = BaseLife()
-

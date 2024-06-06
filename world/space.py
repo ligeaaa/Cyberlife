@@ -34,23 +34,11 @@ class Space:
 
     def add_entity(self, entity: BaseLife):
         self.entities.append(entity)
-        self.space[entity.row_location][entity.col_location] = entity.name
+        # init entity in the world
+        self.space[entity.row_location][entity.col_location] = entity
         self.show_space()
+        entity.start()
 
-
-    def init_world(self):
-        for entity in self.entities:
-            # self.start(entity)
-            entity.start()
-
-    # def start(self, entity):
-    #     while True:
-    #         # 生成1到5之间的随机整数
-    #         random_interval = random.randint(1, 5)
-    #         print(f"等待 {random_interval} 秒...")
-    #         time.sleep(random_interval)
-    #
-    #         self.move()
 
 
 
