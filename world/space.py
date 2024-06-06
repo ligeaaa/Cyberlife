@@ -41,6 +41,15 @@ class Space:
         self.show_space()
         entity.start()
 
+    def check_valid(self, target_row, target_col):
+        """
+        check whether the expected move([target_row, target_col]) is valid
+        """
+        # 判定边界
+        if 0 < target_row < len(self.space) and 0 < target_col < len(self.space[0]):
+            return True
+        return False
+
 
 
 

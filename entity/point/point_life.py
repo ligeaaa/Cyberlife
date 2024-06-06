@@ -45,35 +45,22 @@ class PointLife(BaseLife, threading.Thread):
         """
         random_number = random.randint(0, 3)
         row_move, col_move = self.move_direction[random_number]
-        if self.check_move(row_move, col_move):
-            self.space.space[self.row_location][self.col_location] = 0
-            self.row_location = self.row_location + row_move
-            self.col_location = self.col_location + col_move
-            self.space.space[self.row_location][self.col_location] = self
-            self.space.show_space()
-
-    def check_move(self, row_move, col_move):
-        """
-        check whether the expected move is legitimate
-        :param row_move: The distance traveled on the row
-        :param col_move: The distance traveled on the column
-        :return:
-        """
         target_row = row_move + self.row_location
         target_col = col_move + self.col_location
-        # 判定边界
-        if 0 < target_row < len(self.space.space) and 0 < target_col < len(self.space.space[0]):
-            # 判定是否有障碍
+        if self.space.check_valid(target_row, target_col):
             if self.space.space[target_row][target_col] == 0:
-                return True
-        return False
+                self.space.space[self.row_location][self.col_location] = 0
+                self.row_location = self.row_location + row_move
+                self.col_location = self.col_location + col_move
+                self.space.space[self.row_location][self.col_location] = self
+                self.space.show_space()
 
     def breed(self, other_life: list[BaseLife] = None):
         now_time = time.time()
         # if this entity has lived for 20 seconds
         if now_time - self.birth_time > 30:
-            # find round location
-            if self._find_round_location():
+            # find round location and ensure the coordinates are valid.
+            if self._find_round_location() and self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location
                 if self.space.space[self.row_location - 1][self.col_location] == 0:
                     new_point_life = PointLife(self.row_location - 1, self.col_location, str(random.randint(1, 9)), self.space, self.lock, self.death_and_born_statics)
@@ -100,7 +87,9 @@ class PointLife(BaseLife, threading.Thread):
         step = 3
         for i in range(step):
             for j in range(step):
-                if isinstance(self.space.space[top + i][left + j], PointLife):
-                    return True
+                # Todo 下标可能越界
+                if self.space.check_valid(top + i, left + j):
+                    if isinstance(self.space.space[top + i][left + j], PointLife):
+                        return True
         return False
 
