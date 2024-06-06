@@ -8,12 +8,13 @@ from entity.base_module.base_life import BaseLife
 class Space:
     count = 0
 
-    def __init__(self, row, column, connect=None):
+    def __init__(self, row, column, death_and_born_statics, connect=None):
         self.row = row
         self.column = column
         self.connect = connect
         self.space = self._init_space()
         self.entities = []
+        self.statics = death_and_born_statics
 
     def _init_space(self):
         world = []
@@ -30,6 +31,7 @@ class Space:
                 print(f"{self.space[i][j]} ", end='')
             print()
         print(f"-----------{self.count}------------")
+        print(self.statics)
         self.count = self.count + 1
 
     def add_entity(self, entity: BaseLife):

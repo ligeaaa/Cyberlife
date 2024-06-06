@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import time
 
 from constants.entity_constants.entity_gender import NEUTER
@@ -13,7 +11,7 @@ class BaseLife:
                  gender: int = NEUTER,
                  lifecycle: BaseLifecycle = None,
                  birth_place: str = "place",
-                 productor: list[BaseLife] = None,
+                 productor: list['BaseLife'] = None,
                  name: str = "life",
                  row_location: int = 0,
                  col_location: int = 0):
@@ -42,7 +40,7 @@ class BaseLife:
         """
         ...
 
-    def breed(self, other_life: list[BaseLife] = None):
+    def breed(self, other_life: list['BaseLife'] = None):
         """
         This is a function that allows this life to reproduce another life
         :param other_life:
