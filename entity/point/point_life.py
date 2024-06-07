@@ -22,8 +22,7 @@ class PointLife(BaseLife, threading.Thread):
 
     def __init__(self, row_location, col_location, name, space, lock):
         threading.Thread.__init__(self)
-        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=50)
-        self.lock = lock
+        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=50, lock=lock, energy=200)
         self.space = space
         self.logo = Fore.GREEN + name
 
@@ -37,14 +36,12 @@ class PointLife(BaseLife, threading.Thread):
             time.sleep(random_interval)
             self.lock.acquire()
             if self.death_flag:
-                if self.space.space[self.row_location][self.col_location] == self:
-                    self.space.space[self.row_location][self.col_location] = 0
-                self.space.entities.remove(self)
-                self.lock.release()
+                self.clear_life()
                 break
             self.move()
             self.breed()
             self.death()
+            self.energy -= 1
             self.lock.release()
 
     def move(self):
@@ -69,7 +66,7 @@ class PointLife(BaseLife, threading.Thread):
         # if this entity has lived for 20 seconds
         if now_time - self.birth_time > 35:
             # find round location and ensure the coordinates are valid.
-            if self._find_round_location() and self.space.check_valid(self.row_location - 1, self.col_location):
+            if self._find_round_location(PointLife, 1) and self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location
                 if self.space.space[self.row_location - 1][self.col_location] == 0:
                     new_point_life = PointLife(self.row_location - 1, self.col_location, str(random.randint(1, 9)), self.space, self.lock)
@@ -79,18 +76,3 @@ class PointLife(BaseLife, threading.Thread):
         now_time = time.time()
         if now_time - self.birth_time > self.maximum_age:
             self.death_flag = True
-
-    def _find_round_location(self):
-        """
-        Look for any living things in the surrounding 3 by 3 plots
-        """
-        left = self.col_location - 1
-        top = self.row_location - 1
-        step = 3
-        for i in range(step):
-            for j in range(step):
-                if self.space.check_valid(top + i, left + j):
-                    if isinstance(self.space.space[top + i][left + j], PointLife):
-                        return True
-        return False
-

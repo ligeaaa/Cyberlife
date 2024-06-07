@@ -27,31 +27,34 @@ class EKillerLife(BaseLife, threading.Thread):
 
     def __init__(self, row_location, col_location, name, space, lock):
         threading.Thread.__init__(self)
-        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=150)
-        self.lock = lock
+        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=150, lock=lock, energy=200)
         self.space = space
         self.logo = Fore.RED + name
-        self.energy = 200
 
     def run(self):
         """
         Every random 1-5s move
-        :return:
         """
         while True:
             random_interval = random.randint(1, 5)
             time.sleep(random_interval)
             self.lock.acquire()
+            # if this life is already died
             if self.death_flag:
                 if self.space.space[self.row_location][self.col_location] == self:
+                    # clear this life in the world
                     self.space.space[self.row_location][self.col_location] = 0
+                # and also clear this life ine world's entity list
                 self.space.entities.remove(self)
                 self.lock.release()
                 break
+            # if this life's energy is not too high, then hunt
             if self.energy < 500:
                 self.hunt()
+            # otherwise, just move randomly
             else:
                 self.move()
+            # if this life's energy is enough, then hava a baby
             if self.energy > 300:
                 self.breed()
             self.death()
@@ -76,6 +79,9 @@ class EKillerLife(BaseLife, threading.Thread):
                 self.space.show_space()
 
     def breed(self, other_life: list[BaseLife] = None):
+        """
+        The concrete breed logic
+        """
         now_time = time.time()
         # if this entity has lived for 20 seconds
         if now_time - self.birth_time > 100:
@@ -89,6 +95,9 @@ class EKillerLife(BaseLife, threading.Thread):
                     self.energy -= 300
 
     def death(self):
+        """
+        The concrete death logic. (However, life can also die without this function)
+        """
         now_time = time.time()
         if now_time - self.birth_time > self.maximum_age:
             self.space.space[self.row_location][self.col_location] = 0
@@ -97,6 +106,9 @@ class EKillerLife(BaseLife, threading.Thread):
             self.death_flag = True
 
     def hunt(self):
+        """
+        Find the nearest Point Life, and then try to hunt it.
+        """
         # find the nearest Point Life
         nearest_point_life = None
         min_distance = None
@@ -113,17 +125,3 @@ class EKillerLife(BaseLife, threading.Thread):
             hunt_move(self, nearest_point_life, 3)
         else:
             self.move()
-
-    def _find_round_location(self):
-        """
-        Look for any living things in the surrounding 3 by 3 plots
-        """
-        left = self.col_location - 1
-        top = self.row_location - 1
-        step = 3
-        for i in range(step):
-            for j in range(step):
-                if self.space.check_valid(top + i, left + j):
-                    if isinstance(self.space.space[top + i][left + j], PointLife):
-                        return True
-        return False

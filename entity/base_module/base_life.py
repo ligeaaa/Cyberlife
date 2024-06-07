@@ -1,3 +1,4 @@
+import threading
 import time
 
 from constants.entity_constants.entity_gender import NEUTER
@@ -15,25 +16,24 @@ class BaseLife:
                  productor: list['BaseLife'] = None,
                  name: str = "life",
                  row_location: int = 0,
-                 col_location: int = 0):
-        # life's maximum age
-        self.maximum_age = maximum_age
-        # life's gender
-        self.gender = gender
-        # life's lifecycle
-        self.lifecycle = lifecycle
-        # when life born
-        self.birth_time = time.time()
-        # where life born
-        self.birth_place = birth_place
-        # who or which produce this life
-        self.productor = productor
-        # life's name
-        self.name = name
-        self.row_location = row_location
-        self.col_location = col_location
-        self.logo = Fore.BLACK + "N"
-        self.death_flag = False
+                 col_location: int = 0,
+                 lock: threading.Lock = None,
+                 energy: float = 0):
+        self.maximum_age = maximum_age         # life's maximum age
+        self.gender = gender                   # life's gender
+        self.lifecycle = lifecycle             # life's lifecycle
+        self.birth_time = time.time()          # when life born
+        self.birth_place = birth_place         # where life born
+        self.productor = productor             # who or which produce this life
+        self.name = name                       # life's name
+        self.row_location = row_location       # life's row index
+        self.col_location = col_location       # life's column index
+        self.logo = Fore.BLACK + "N"           # how this life is shown on the world
+        self.death_flag = False                # whether this life is dead
+        self.id = None                         # life's id
+        self.energy = energy                   # life's energy in their body
+        self.space = None                      # Which world does this life belong to
+        self.lock = lock                       # Thread lock
 
     def absorbed_energy(self, organization: BaseOrganization = None, energy_resource=None):
         """
@@ -67,6 +67,27 @@ class BaseLife:
         :return:
         """
         ...
+
+    def _find_round_location(self, life_type, step):
+        """
+        Look for any living things in the surrounding 3 by 3 plots
+        """
+        left = self.col_location - step
+        top = self.row_location - step
+        steps = step * 2 + 1
+        for i in range(steps):
+            for j in range(steps):
+                if self.space.check_valid(top + i, left + j):
+                    if isinstance(self.space.space[top + i][left + j], life_type):
+                        return True
+        return False
+
+    def clear_life(self):
+        if self.space.space[self.row_location][self.col_location] == self:
+            self.space.space[self.row_location][self.col_location] = 0
+        self.space.entities.remove(self)
+        self.lock.release()
+
 
     def __str__(self):
         return str(self.logo)

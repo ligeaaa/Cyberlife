@@ -18,6 +18,9 @@ class Space:
         self.entities = []
 
     def _init_space(self):
+        """
+        Pad the space with zeros
+        """
         world = []
         for i in range(self.row):
             row = []
@@ -27,6 +30,9 @@ class Space:
         return world
 
     def show_space(self):
+        """
+        print the world
+        """
         for i in range(self.row):
             for j in range(self.column):
                 print(f"{self.space[i][j]} ", end='')
@@ -35,6 +41,9 @@ class Space:
         self.count = self.count + 1
 
     def add_entity(self, entity: BaseLife):
+        """
+        add the entity in the world
+        """
         self.entities.append(entity)
         # init entity in the world
         self.space[entity.row_location][entity.col_location] = entity

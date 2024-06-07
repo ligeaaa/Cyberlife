@@ -5,7 +5,7 @@ from entity.base_module.base_life import BaseLife
 
 def hunt_move(a: BaseLife, b: BaseLife, step):
     """
-    a moves towards b by step steps
+    a life moves towards b life by step steps
     :param a: the host life
     :param b: the target life
     """
@@ -25,7 +25,7 @@ def hunt_move(a: BaseLife, b: BaseLife, step):
 
         if a.row_location != target_row or a.col_location != target_col:
             if isinstance(a.space.space[target_row][target_col], type(b)):
-                a.energy += 200
+                a.energy += b.energy / 2
                 a.space.space[target_row][target_col] = 0
                 b.death_flag = True
             if a.space.space[target_row][target_col] == 0:
