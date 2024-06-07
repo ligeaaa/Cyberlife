@@ -3,6 +3,7 @@ import time
 from constants.entity_constants.entity_gender import NEUTER
 from entity.base_module.base_lifecycle import BaseLifecycle
 from entity.base_module.base_organization import BaseOrganization
+from colorama import Fore
 
 
 class BaseLife:
@@ -31,6 +32,8 @@ class BaseLife:
         self.name = name
         self.row_location = row_location
         self.col_location = col_location
+        self.logo = Fore.BLACK + "N"
+        self.death_flag = False
 
     def absorbed_energy(self, organization: BaseOrganization = None, energy_resource=None):
         """
@@ -52,7 +55,11 @@ class BaseLife:
         """
         This is a function that allows this life to die
         """
-        ...
+        # now_time = time.time()
+        # if now_time - self.birth_time > self.maximum_age:
+        #     self.space.space[self.row_location][self.col_location] = 0
+        #     self.death_and_born_statics.death += 1
+        #     self.death_flag = True
 
     def growth(self):
         """
@@ -60,6 +67,9 @@ class BaseLife:
         :return:
         """
         ...
+
+    def __str__(self):
+        return str(self.logo)
 
 
 if __name__ == '__main__':
