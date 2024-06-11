@@ -94,16 +94,6 @@ class EKillerLife(BaseLife, threading.Thread):
                     self.space.add_entity(new_life)
                     self.energy -= 300
 
-    def death(self):
-        """
-        The concrete death logic. (However, life can also die without this function)
-        """
-        now_time = time.time()
-        if now_time - self.birth_time > self.maximum_age:
-            self.space.space[self.row_location][self.col_location] = 0
-            self.death_flag = True
-        if self.energy < 0:
-            self.death_flag = True
 
     def hunt(self):
         """

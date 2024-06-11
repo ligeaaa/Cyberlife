@@ -53,13 +53,13 @@ class BaseLife:
 
     def death(self):
         """
-        This is a function that allows this life to die
+        The concrete death logic. (However, life can also die without this function)
         """
-        # now_time = time.time()
-        # if now_time - self.birth_time > self.maximum_age:
-        #     self.space.space[self.row_location][self.col_location] = 0
-        #     self.death_and_born_statics.death += 1
-        #     self.death_flag = True
+        now_time = time.time()
+        if now_time - self.birth_time > self.maximum_age:
+            self.death_flag = True
+        if self.energy < 0:
+            self.death_flag = True
 
     def growth(self):
         """

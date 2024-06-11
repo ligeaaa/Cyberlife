@@ -72,7 +72,3 @@ class PointLife(BaseLife, threading.Thread):
                     new_point_life = PointLife(self.row_location - 1, self.col_location, str(random.randint(1, 9)), self.space, self.lock)
                     self.space.add_entity(new_point_life)
 
-    def death(self):
-        now_time = time.time()
-        if now_time - self.birth_time > self.maximum_age:
-            self.death_flag = True
