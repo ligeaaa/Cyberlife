@@ -1,7 +1,9 @@
 import threading
 import time
 
+from common.msg import Message
 from constants.entity_constants.entity_gender import NEUTER
+from constants.msg_type_constants import DEATH
 from entity.base_module.base_lifecycle import BaseLifecycle
 from entity.base_module.base_organization import BaseOrganization
 from colorama import Fore
@@ -32,7 +34,7 @@ class BaseLife:
         self.death_flag = False                # whether this life is dead
         self.id = None                         # life's id
         self.energy = energy                   # life's energy in their body
-        self.space = None                      # Which world does this life belong to
+        self.space = None        # Which world does this life belong to
         self.lock = lock                       # Thread lock
 
     def absorbed_energy(self, organization: BaseOrganization = None, energy_resource=None):
@@ -84,9 +86,19 @@ class BaseLife:
 
     def clear_life(self):
         if self.space.space[self.row_location][self.col_location] == self:
+            # clear this life in the world
             self.space.space[self.row_location][self.col_location] = 0
+        # and also clear this life ine world's entity list
         self.space.entities.remove(self)
+        self.space.client.send_information(Message(DEATH, count=1))
         self.lock.release()
+
+
+    def send_message(self):
+        """
+        send message to world server
+        """
+        ...
 
 
     def __str__(self):

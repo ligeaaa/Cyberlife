@@ -1,0 +1,2 @@
+BORN = "BORN"
+DEATH = "death"

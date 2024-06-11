@@ -2,6 +2,8 @@ import random
 import threading
 import time
 
+from common.msg import Message
+from constants.msg_type_constants import BORN
 from entity.base_module.base_life import BaseLife
 from entity.base_module.base_organization import BaseOrganization
 from colorama import Fore
@@ -41,12 +43,7 @@ class EKillerLife(BaseLife, threading.Thread):
             self.lock.acquire()
             # if this life is already died
             if self.death_flag:
-                if self.space.space[self.row_location][self.col_location] == self:
-                    # clear this life in the world
-                    self.space.space[self.row_location][self.col_location] = 0
-                # and also clear this life ine world's entity list
-                self.space.entities.remove(self)
-                self.lock.release()
+                self.clear_life()
                 break
             # if this life's energy is not too high, then hunt
             if self.energy < 500:
@@ -93,6 +90,7 @@ class EKillerLife(BaseLife, threading.Thread):
                                            self.space, self.lock)
                     self.space.add_entity(new_life)
                     self.energy -= 300
+                    self.space.client.send_information(Message(BORN, count=1))
 
 
     def hunt(self):

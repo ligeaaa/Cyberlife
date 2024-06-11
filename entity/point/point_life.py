@@ -2,6 +2,8 @@ import random
 import threading
 import time
 
+from common.msg import Message
+from constants.msg_type_constants import BORN
 from entity.base_module.base_life import BaseLife
 from entity.base_module.base_organization import BaseOrganization
 from colorama import Fore
@@ -42,6 +44,7 @@ class PointLife(BaseLife, threading.Thread):
             self.breed()
             self.death()
             self.energy -= 1
+            self.send_message()
             self.lock.release()
 
     def move(self):
@@ -71,4 +74,5 @@ class PointLife(BaseLife, threading.Thread):
                 if self.space.space[self.row_location - 1][self.col_location] == 0:
                     new_point_life = PointLife(self.row_location - 1, self.col_location, str(random.randint(1, 9)), self.space, self.lock)
                     self.space.add_entity(new_point_life)
+                    self.space.client.send_information(Message(BORN, count=1))
 
