@@ -56,6 +56,7 @@ class EKillerLife(BaseLife, threading.Thread):
                 self.breed()
             self.death()
             self.energy -= 20
+            self.space.show_space()
             self.lock.release()
 
     def move(self):
@@ -73,15 +74,13 @@ class EKillerLife(BaseLife, threading.Thread):
                 self.row_location = self.row_location + row_move
                 self.col_location = self.col_location + col_move
                 self.space.space[self.row_location][self.col_location] = self
-                self.space.show_space()
 
     def breed(self, other_life: list[BaseLife] = None):
         """
         The concrete breed logic
         """
         now_time = time.time()
-        # if this entity has lived for 20 seconds
-        if now_time - self.birth_time > 100:
+        if 50 < now_time - self.birth_time < 70:
             # ensure the coordinates are valid.
             if self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location

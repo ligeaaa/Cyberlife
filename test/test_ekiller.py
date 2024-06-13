@@ -11,12 +11,10 @@ from queue import Queue
 
 from entity.point.point_life import PointLife
 from world.space import Space
-from world.statics import DeathAndBreedStatics
 
 
 def start():
     lock = threading.Lock()
-    death_and_born_statics = DeathAndBreedStatics()
     # 10 * 10 world
     space = Space(2, 10)
     space.show_space()
