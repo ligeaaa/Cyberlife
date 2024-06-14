@@ -31,7 +31,7 @@ class EKillerLife(BaseLife, threading.Thread):
         """
         while True:
             random_interval = random.randint(1, 5)
-            time.sleep(random_interval)
+            time.sleep(random_interval / self.space.time_flow_rate)
             self.lock.acquire()
             # if this life is already died
             if self.death_flag:
@@ -49,6 +49,7 @@ class EKillerLife(BaseLife, threading.Thread):
             self.death()
             self.energy -= 20
             self.space.show_space()
+            self.act_count += 1
             self.lock.release()
 
 
@@ -56,8 +57,7 @@ class EKillerLife(BaseLife, threading.Thread):
         """
         The concrete breed logic
         """
-        now_time = time.time()
-        if 50 < now_time - self.birth_time < 70:
+        if 50 < self.act_count < 70:
             # ensure the coordinates are valid.
             if self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location

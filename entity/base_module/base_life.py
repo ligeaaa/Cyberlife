@@ -45,6 +45,8 @@ class BaseLife:
         self.energy = energy                   # life's energy in their body
         self.space = None        # Which world does this life belong to
         self.lock = lock                       # Thread lock
+        self.death_time = None
+        self.act_count = 0
 
     def absorbed_energy(self, organization: BaseOrganization = None, energy_resource=None):
         """

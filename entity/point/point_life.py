@@ -27,7 +27,7 @@ class PointLife(BaseLife, threading.Thread):
         """
         while True:
             random_interval = random.randint(1, 5)
-            time.sleep(random_interval)
+            time.sleep(random_interval / self.space.time_flow_rate)
             self.lock.acquire()
             if self.death_flag:
                 self.clear_life()
@@ -38,13 +38,13 @@ class PointLife(BaseLife, threading.Thread):
             self.energy -= 1
             self.send_message()
             self.space.show_space()
+            self.act_count += 1
             self.lock.release()
 
 
     def breed(self, other_life: list[BaseLife] = None):
-        now_time = time.time()
         # if this entity has lived for 20 seconds
-        if 10 < now_time - self.birth_time < 30:
+        if 10 < self.act_count < 30:
             # find round location and ensure the coordinates are valid.
             if self._find_round_location(PointLife, 1) and self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location

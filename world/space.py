@@ -16,11 +16,12 @@ class Space:
     count = 0
     save_space = []
 
-    def __init__(self, row, column, connect=None):
+    def __init__(self, row, column, connect=None, time_flow_rate=1):
         init(autoreset=True)
         self.row = row
         self.column = column
         self.connect = connect
+        self.time_flow_rate = time_flow_rate
         self.space = self._init_space()
         self.entities = []
         server_thread = threading.Thread(target=self._init_server)

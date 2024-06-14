@@ -27,7 +27,7 @@ def exit_handler(world):
 def start():
     lock = threading.Lock()
     # 10 * 10 world
-    space = Space(10, 30)
+    space = Space(10, 30, time_flow_rate=1)
     space.show_space()
     point_life1 = PointLife(1, 1, "1", space, lock)
     point_life2 = PointLife(2, 2, "2", space, lock)
