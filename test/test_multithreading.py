@@ -1,14 +1,13 @@
 import pickle
 
-from common.get_time import get_real_time
-from entity.ekiller.ekiller_life import EKillerLife
-
 try:
     import sys
-
     sys.path.append(r'C:\Users\NeuroXess\Desktop\gitlab\Cyberlife')
 except Exception as e:
     pass
+
+from common.get_time import get_real_time
+from entity.ekiller.ekiller_life import EKillerLife
 
 import threading
 
@@ -27,7 +26,7 @@ def exit_handler(world):
 def start():
     lock = threading.Lock()
     # 10 * 10 world
-    space = Space(10, 30, time_flow_rate=1)
+    space = Space(10, 30, time_flow_rate=3)
     space.show_space()
     point_life1 = PointLife(1, 1, "1", space, lock)
     point_life2 = PointLife(2, 2, "2", space, lock)

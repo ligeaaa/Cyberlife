@@ -44,7 +44,7 @@ class EKillerLife(BaseLife, threading.Thread):
             else:
                 self.move()
             # if this life's energy is enough, then hava a baby
-            if self.energy > 300:
+            if self.energy > 400:
                 self.breed()
             self.death()
             self.energy -= 20
@@ -57,7 +57,7 @@ class EKillerLife(BaseLife, threading.Thread):
         """
         The concrete breed logic
         """
-        if 50 < self.act_count < 70:
+        if 50 < self.act_count < 60:
             # ensure the coordinates are valid.
             if self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location

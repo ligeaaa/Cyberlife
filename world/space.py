@@ -1,15 +1,13 @@
+import os
 import pickle
-import random
+import sys
 import threading
 import time
 
 from common.client.main_client import Client
-from common.get_time import get_real_time
-from common.msg import Message
 from common.server.main_server import Server
 from entity.base_module.base_life import BaseLife
 from colorama import init
-import socket
 
 
 class Space:
@@ -24,6 +22,7 @@ class Space:
         self.time_flow_rate = time_flow_rate
         self.space = self._init_space()
         self.entities = []
+        self.old_time = time.time()
         server_thread = threading.Thread(target=self._init_server)
         server_thread.start()
         time.sleep(1)
@@ -46,6 +45,18 @@ class Space:
         """
         print the world
         """
+        # don't show space too quick
+        if time.time() - self.old_time < 1:
+            return
+        else:
+            if sys.stdin.isatty():
+                if os.name == 'nt':
+                    _ = os.system('cls')
+                else:
+                    _ = os.system('clear')
+            self.old_time = time.time()
+
+        # Todo pref, do not use loop, but print it at once
         for i in range(self.row):
             for j in range(self.column):
                 print(f"{self.space[i][j]} ", end='')
@@ -53,7 +64,7 @@ class Space:
         print(f"-----------{self.count}------------")
         self.count = self.count + 1
         print(self.server.data_storage)
-        # Todo 设计保存逻辑
+        # Todo save important data about space and entites
         # self.save_space.append(self)
 
     def add_entity(self, entity: BaseLife):
