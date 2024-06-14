@@ -1,3 +1,4 @@
+import random
 import threading
 import time
 
@@ -10,6 +11,14 @@ from colorama import Fore
 
 
 class BaseLife:
+    # move direction
+    move_direction = [
+        (1, 0),
+        (-1, 0),
+        (0, 1),
+        (0, -1)
+    ]
+
     def __init__(self,
                  maximum_age: float = None,
                  gender: int = NEUTER,
@@ -100,6 +109,14 @@ class BaseLife:
         """
         ...
 
+    def move(self):
+        """
+        The concrete move logic
+        :return:
+        """
+        random_number = random.randint(0, 3)
+        row_move, col_move = self.move_direction[random_number]
+        self.space.move_life(self, row_move, col_move)
 
     def __str__(self):
         return str(self.logo)

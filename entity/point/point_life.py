@@ -14,14 +14,6 @@ class PointLife(BaseLife, threading.Thread):
     Producers
     """
 
-    # move direction
-    move_direction = [
-        (1, 0),
-        (-1, 0),
-        (0, 1),
-        (0, -1)
-    ]
-
     def __init__(self, row_location, col_location, name, space, lock):
         threading.Thread.__init__(self)
         BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=50, lock=lock, energy=200)
@@ -48,21 +40,6 @@ class PointLife(BaseLife, threading.Thread):
             self.space.show_space()
             self.lock.release()
 
-    def move(self):
-        """
-        The concrete move logic
-        :return:
-        """
-        random_number = random.randint(0, 3)
-        row_move, col_move = self.move_direction[random_number]
-        target_row = row_move + self.row_location
-        target_col = col_move + self.col_location
-        if self.space.check_valid(target_row, target_col):
-            if self.space.space[target_row][target_col] == 0:
-                self.space.space[self.row_location][self.col_location] = 0
-                self.row_location = self.row_location + row_move
-                self.col_location = self.col_location + col_move
-                self.space.space[self.row_location][self.col_location] = self
 
     def breed(self, other_life: list[BaseLife] = None):
         now_time = time.time()

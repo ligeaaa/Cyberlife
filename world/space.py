@@ -104,7 +104,7 @@ class Space:
             space = pickle.load(f)
         return space
 
-    def move(self, life: BaseLife, horizontal_movement: int, vertical_movement: int):
+    def move_life(self, life: BaseLife, vertical_movement: int, horizontal_movement: int):
         """
         :param life: entity
         :param horizontal_movement: The distance of movement
@@ -113,15 +113,17 @@ class Space:
                                     where negative values indicate down and positive values indicate up.
         :return: boolean
         """
-        # random_number = random.randint(0, 3)
-        # row_move, col_move = self.move_direction[random_number]
-        # target_row = row_move + self.row_location
-        # target_col = col_move + self.col_location
-        # if self.space.check_valid(target_row, target_col):
-        #     if self.space.space[target_row][target_col] == 0:
-        #         self.space.space[self.row_location][self.col_location] = 0
-        #         self.row_location = self.row_location + row_move
-        #         self.col_location = self.col_location + col_move
-        #         self.space.space[self.row_location][self.col_location] = self
+        if life not in self.entities:
+            return False
+        row_location = life.row_location
+        col_location = life.col_location
+        target_row = vertical_movement + row_location
+        target_col = horizontal_movement + col_location
+        if self.check_valid(target_row, target_col):
+            if self.space[target_row][target_col] == 0:
+                self.space[row_location][col_location] = 0
+                life.row_location = life.row_location + vertical_movement
+                life.col_location = life.col_location + horizontal_movement
+                self.space[target_row][target_col] = life
 
 
