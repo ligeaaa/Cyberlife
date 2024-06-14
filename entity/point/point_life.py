@@ -44,7 +44,7 @@ class PointLife(BaseLife, threading.Thread):
 
     def breed(self, other_life: list[BaseLife] = None):
         # if this entity has lived for 20 seconds
-        if 10 < self.act_count < 30:
+        if 10 < self.act_count:
             # find round location and ensure the coordinates are valid.
             if self._find_round_location(PointLife, 1) and self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location

@@ -57,11 +57,11 @@ class EKillerLife(BaseLife, threading.Thread):
         """
         The concrete breed logic
         """
-        if 50 < self.act_count < 60:
+        if 50 < self.act_count < 100:
             # ensure the coordinates are valid.
             if self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location
-                if self.space.space[self.row_location - 1][self.col_location] == 0:
+                if isinstance(self.space.space[self.row_location - 1][self.col_location], (int, PointLife)):
                     new_life = EKillerLife(self.row_location - 1, self.col_location, str(random.randint(1, 9)),
                                            self.space, self.lock)
                     self.space.add_entity(new_life)

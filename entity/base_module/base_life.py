@@ -68,8 +68,7 @@ class BaseLife:
         """
         The concrete death logic. (However, life can also die without this function)
         """
-        now_time = time.time()
-        if now_time - self.birth_time > self.maximum_age:
+        if self.act_count > self.maximum_age:
             self.death_flag = True
         if self.energy < 0:
             self.death_flag = True
