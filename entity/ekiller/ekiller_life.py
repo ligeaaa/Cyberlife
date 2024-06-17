@@ -1,11 +1,12 @@
+import math
 import random
 import threading
 import time
 
 from common.msg import Message
+from common.probability import in_probability
 from constants.msg_type_constants import BORN
 from entity.base_module.base_life import BaseLife
-from entity.base_module.base_organization import BaseOrganization
 from colorama import Fore
 
 from entity.point.point_life import PointLife
@@ -21,7 +22,8 @@ class EKillerLife(BaseLife, threading.Thread):
 
     def __init__(self, row_location, col_location, name, space, lock):
         threading.Thread.__init__(self)
-        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=150, lock=lock, energy=200)
+        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=150,
+                          lock=lock, energy=200, min_childbearing_age=50, max_childbearing_age=80)
         self.space = space
         self.logo = Fore.RED + name
 
@@ -47,17 +49,19 @@ class EKillerLife(BaseLife, threading.Thread):
             if self.energy > 400:
                 self.breed()
             self.death()
-            self.energy -= 20
+            self.energy -= 5
             self.space.show_space()
             self.act_count += 1
             self.lock.release()
-
 
     def breed(self, other_life: list[BaseLife] = None):
         """
         The concrete breed logic
         """
-        if 50 < self.act_count < 100:
+        if self.min_childbearing_age <= self.act_count:
+            probability = self.calculate_fertility_probability(self.act_count)
+            if not in_probability(probability):
+                return
             # ensure the coordinates are valid.
             if self.space.check_valid(self.row_location - 1, self.col_location):
                 # if exists a empty location
@@ -67,7 +71,6 @@ class EKillerLife(BaseLife, threading.Thread):
                     self.space.add_entity(new_life)
                     self.energy -= 300
                     self.space.client.send_information(Message(BORN, count=1))
-
 
     def hunt(self):
         """

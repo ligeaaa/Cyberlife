@@ -138,4 +138,29 @@ class Space:
                 life.col_location = life.col_location + horizontal_movement
                 self.space[target_row][target_col] = life
 
+    def _get_wrapped_position(self, x, y):
+        """
+        Get the wrapped position to handle the boundary conditions
+        """
+        wrapped_x = x % self.row
+        wrapped_y = y % self.column
+        return wrapped_x, wrapped_y
 
+    def get_value(self, x, y):
+        """
+        Get the value at the position (x, y) with wrapping around the edges
+        """
+        wrapped_x, wrapped_y = self._get_wrapped_position(x, y)
+        return self.space[wrapped_x][wrapped_y]
+
+    def set_value(self, x, y, value):
+        """
+        Set the value at the position (x, y) with wrapping around the edges
+        """
+        wrapped_x, wrapped_y = self._get_wrapped_position(x, y)
+        self.space[wrapped_x][wrapped_y] = value
+
+if __name__ == "__main__":
+    # Example usage
+    space = Space(5, 5)
+    space.show_space()

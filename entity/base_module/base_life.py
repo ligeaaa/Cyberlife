@@ -1,3 +1,4 @@
+import math
 import random
 import threading
 import time
@@ -29,7 +30,9 @@ class BaseLife:
                  row_location: int = 0,
                  col_location: int = 0,
                  lock: threading.Lock = None,
-                 energy: float = 0):
+                 energy: float = 0,
+                 min_childbearing_age: int = 0,
+                 max_childbearing_age: int = 0):
         self.maximum_age = maximum_age         # life's maximum age
         self.gender = gender                   # life's gender
         self.lifecycle = lifecycle             # life's lifecycle
@@ -43,10 +46,12 @@ class BaseLife:
         self.death_flag = False                # whether this life is dead
         self.id = None                         # life's id
         self.energy = energy                   # life's energy in their body
-        self.space = None        # Which world does this life belong to
+        self.space = None                      # Which world does this life belong to
         self.lock = lock                       # Thread lock
         self.death_time = None
         self.act_count = 0
+        self.min_childbearing_age: int = min_childbearing_age
+        self.max_childbearing_age: int = max_childbearing_age
 
     def absorbed_energy(self, organization: BaseOrganization = None, energy_resource=None):
         """
@@ -118,6 +123,31 @@ class BaseLife:
         random_number = random.randint(0, 3)
         row_move, col_move = self.move_direction[random_number]
         self.space.move_life(self, row_move, col_move)
+
+    def _Quadratic_function(self, x, x1, x2):
+        """
+        Get the result of a quadratic function with a peak value of 1
+        :param x: Input value
+        :param x1: The first root of the quadratic function
+        :param x2: The second root of the quadratic function
+        :return: y value
+        """
+        return -1 * abs(1 / ((x1 * x2) - (math.pow((x1 + x2), 2) / 4))) * (x - x1) * (x - x2)
+
+    def calculate_fertility_probability(self, age):
+        """
+        Calculate fertility probability based on a piecewise function.
+        :param age: Current age
+        :return: Fertility probability
+        """
+        if age <= self.min_childbearing_age:
+            return 0
+        elif self.min_childbearing_age < age <= (self.max_childbearing_age / 10) + (self.min_childbearing_age * 9 / 10):
+            return self._Quadratic_function(age, self.min_childbearing_age, (self.max_childbearing_age / 5) + (self.min_childbearing_age * 4 / 5))
+        elif (self.max_childbearing_age / 10) + (self.min_childbearing_age * 9 / 10) < age <= self.max_childbearing_age:
+            return self._Quadratic_function(age, (self.min_childbearing_age * 9 / 5) - (self.max_childbearing_age * 4 / 5), self.max_childbearing_age)
+        else:
+            return 0
 
     def __str__(self):
         return str(self.logo)

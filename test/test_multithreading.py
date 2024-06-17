@@ -1,4 +1,5 @@
 import pickle
+import random
 
 try:
     import sys
@@ -26,22 +27,21 @@ def exit_handler(world):
 def start():
     lock = threading.Lock()
     # 10 * 10 world
-    space = Space(100, 100, time_flow_rate=100)
-    space.show_space()
-    point_life1 = PointLife(1, 1, "1", space, lock)
-    point_life2 = PointLife(2, 2, "2", space, lock)
-    point_life3 = PointLife(3, 3, "3", space, lock)
-    point_life4 = PointLife(9, 29, "4", space, lock)
-    point_life5 = PointLife(10, 29, "5", space, lock)
+    row = 30
+    column = 100
+    space = Space(row, column, time_flow_rate=100)
+    for i in range(100):
+        a = random.randint(0, row - 2)
+        b = random.randint(0, column - 2)
+        point_life = PointLife(a, b, "1", space, lock)
+        point_life2 = PointLife(a + 1, b, "1", space, lock)
+        space.add_entity(point_life)
+        space.add_entity(point_life2)
     ekiller_life1 = EKillerLife(9, 9, "1", space, lock)
     ekiller_life2 = EKillerLife(8, 9, "1", space, lock)
-    space.add_entity(point_life1)
-    space.add_entity(point_life2)
-    space.add_entity(point_life3)
-    space.add_entity(point_life4)
-    space.add_entity(point_life5)
     space.add_entity(ekiller_life1)
     space.add_entity(ekiller_life2)
+    space.show_space()
 
 if __name__ == '__main__':
     start()
