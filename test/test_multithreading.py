@@ -1,4 +1,3 @@
-import pickle
 import random
 
 try:
@@ -15,21 +14,13 @@ import threading
 from entity.point.point_life import PointLife
 from world.space import Space
 
-import atexit
-
-
-def exit_handler(world):
-    with open(get_real_time() + '_world_final.pkl', 'wb') as f:
-        pickle.dump(world, f)
-
-
 
 def start():
     lock = threading.Lock()
     # 10 * 10 world
     row = 30
     column = 100
-    space = Space(row, column, time_flow_rate=100)
+    space = Space(row, column, time_flow_rate=1000)
     for i in range(100):
         a = random.randint(0, row - 2)
         b = random.randint(0, column - 2)
@@ -37,10 +28,11 @@ def start():
         point_life2 = PointLife(a + 1, b, "1", space, lock)
         space.add_entity(point_life)
         space.add_entity(point_life2)
-    ekiller_life1 = EKillerLife(9, 9, "1", space, lock)
-    ekiller_life2 = EKillerLife(8, 9, "1", space, lock)
-    space.add_entity(ekiller_life1)
-    space.add_entity(ekiller_life2)
+    for i in range(10):
+        a = random.randint(0, row - 2)
+        b = random.randint(0, column - 2)
+        ekiller_life = EKillerLife(a, b, "1", space, lock)
+        space.add_entity(ekiller_life)
     space.show_space()
 
 if __name__ == '__main__':

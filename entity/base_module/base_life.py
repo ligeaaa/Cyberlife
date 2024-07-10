@@ -33,25 +33,25 @@ class BaseLife:
                  energy: float = 0,
                  min_childbearing_age: int = 0,
                  max_childbearing_age: int = 0):
-        self.maximum_age = maximum_age         # life's maximum age
-        self.gender = gender                   # life's gender
-        self.lifecycle = lifecycle             # life's lifecycle
-        self.birth_time = time.time()          # when life born
-        self.birth_place = birth_place         # where life born
-        self.productor = productor             # who or which produce this life
-        self.name = name                       # life's name
-        self.row_location = row_location       # life's row index
-        self.col_location = col_location       # life's column index
-        self.logo = Fore.BLACK + "N"           # how this life is shown on the world
-        self.death_flag = False                # whether this life is dead
-        self.id = None                         # life's id
-        self.energy = energy                   # life's energy in their body
-        self.space = None                      # Which world does this life belong to
-        self.lock = lock                       # Thread lock
-        self.death_time = None
-        self.act_count = 0
-        self.min_childbearing_age: int = min_childbearing_age
-        self.max_childbearing_age: int = max_childbearing_age
+        self.maximum_age = maximum_age                              # life's maximum age
+        self.gender = gender                                        # life's gender
+        self.lifecycle = lifecycle                                  # life's lifecycle
+        self.birth_time = time.time()                               # when life born
+        self.birth_place = birth_place                              # where life born
+        self.productor = productor                                  # who or which produce this life
+        self.name = name                                            # life's name
+        self.row_location = row_location                            # life's row index
+        self.col_location = col_location                            # life's column index
+        self.logo = Fore.BLACK + "N"                                # how this life is shown on the world
+        self.death_flag = False                                     # whether this life is dead
+        self.id = None                                              # life's id
+        self.energy = energy                                        # life's energy in their body
+        self.space = None                                           # Which world does this life belong to
+        self.lock = lock                                            # Thread lock
+        self.death_time = None                                      # When this life died
+        self.act_count = 0                                          # Number of activities
+        self.min_childbearing_age: int = min_childbearing_age       # minimum childbearing age
+        self.max_childbearing_age: int = max_childbearing_age       # maximin childbearing age
 
     def absorbed_energy(self, organization: BaseOrganization = None, energy_resource=None):
         """

@@ -14,7 +14,7 @@ class Space:
     count = 0
     save_space = []
 
-    def __init__(self, row, column, connect=None, time_flow_rate=1):
+    def __init__(self, row, column, connect=False, time_flow_rate=1):
         init(autoreset=True)
         self.row = row
         self.column = column

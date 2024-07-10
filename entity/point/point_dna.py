@@ -1,5 +1,10 @@
-class BaseDna:
+from entity.base_module.base_dna import BaseDna
+
+
+class PointDna(BaseDna):
     def __init__(self):
+        BaseDna.__init__(self)
+        self.dna_count = None
         self.dnas = {
             "leg": None,
             "brain": None,
@@ -8,10 +13,3 @@ class BaseDna:
             "sex": None,
             "base": None
         }
-        self.add_base_dna()
-
-    def add_leg_dna(self):
-        leg_dna = {
-            ...
-        }
-        self.dnas

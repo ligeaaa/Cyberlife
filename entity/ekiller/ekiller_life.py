@@ -22,8 +22,8 @@ class EKillerLife(BaseLife, threading.Thread):
 
     def __init__(self, row_location, col_location, name, space, lock):
         threading.Thread.__init__(self)
-        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=150,
-                          lock=lock, energy=200, min_childbearing_age=50, max_childbearing_age=80)
+        BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=80,
+                          lock=lock, energy=200, min_childbearing_age=40, max_childbearing_age=70)
         self.space = space
         self.logo = Fore.RED + name
 
@@ -60,11 +60,11 @@ class EKillerLife(BaseLife, threading.Thread):
         """
         if self.min_childbearing_age <= self.act_count:
             probability = self.calculate_fertility_probability(self.act_count)
-            if not in_probability(probability):
+            if not in_probability(probability - 0.2):
                 return
             # ensure the coordinates are valid.
             if self.space.check_valid(self.row_location - 1, self.col_location):
-                # if exists a empty location
+                # if exists an empty location
                 if isinstance(self.space.space[self.row_location - 1][self.col_location], (int, PointLife)):
                     new_life = EKillerLife(self.row_location - 1, self.col_location, str(random.randint(1, 9)),
                                            self.space, self.lock)
