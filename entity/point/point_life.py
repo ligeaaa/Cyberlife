@@ -8,6 +8,9 @@ from entity.base_module.base_life import BaseLife
 from entity.base_module.base_organization import BaseOrganization
 from colorama import Fore
 
+from entity.point.point_leg import PointLeg
+
+
 class PointLife(BaseLife, threading.Thread):
     """
     The simplest life, which can only move, breed and die.
@@ -19,6 +22,9 @@ class PointLife(BaseLife, threading.Thread):
         BaseLife.__init__(self, row_location=row_location, col_location=col_location, name=name, maximum_age=50, lock=lock, energy=200)
         self.space = space
         self.logo = Fore.GREEN + name
+        self.leg = PointLeg(self)
+
+
 
     def run(self):
         """
@@ -32,7 +38,7 @@ class PointLife(BaseLife, threading.Thread):
             if self.death_flag:
                 self.clear_life()
                 break
-            self.move()
+            self.leg.move(self.space)
             self.breed()
             self.death()
             self.energy -= 1
@@ -55,10 +61,5 @@ class PointLife(BaseLife, threading.Thread):
                     self.space.client.send_information(Message(BORN, count=1))
 
     def avoid(self):
-
-
-
-
-
         ...
 

@@ -1,10 +1,10 @@
 import random
 
-try:
-    import sys
-    sys.path.append(r'C:\Users\NeuroXess\Desktop\gitlab\Cyberlife')
-except Exception as e:
-    pass
+# try:
+#     import sys
+#     sys.path.append(r'C:\Users\NeuroXess\Desktop\gitlab\Cyberlife')
+# except Exception as e:
+#     pass
 
 from common.get_time import get_real_time
 from entity.ekiller.ekiller_life import EKillerLife

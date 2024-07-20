@@ -3,8 +3,7 @@ from entity.base_module.base_dna import BaseDna
 
 
 class BaseOrganization:
-    def __init__(self, dna):
-        self.construct(dna)
+    def __init__(self):
         ...
 
     def construct(self, dna: BaseDna):
