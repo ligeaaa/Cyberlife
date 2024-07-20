@@ -10,6 +10,19 @@ from entity.base_module.base_life import BaseLife
 from colorama import init
 
 
+def check_data_empty(space: list):
+    while True:
+        flag = True
+        for row in space:
+            for value in row:
+                if value != 0:
+                    flag = False
+                    break
+        if flag:
+            print(f"{time.time()}: NO LIFE IN SPACE")
+        time.sleep(1)
+
+
 class Space:
     count = 0
     save_space = []
@@ -28,6 +41,11 @@ class Space:
         time.sleep(1)
         client_thread = threading.Thread(target=self._init_client)
         client_thread.start()
+
+        # Thread used to check whether all entity died
+        check_thread = threading.Thread(target=check_data_empty, args=(self.space,))
+        check_thread.daemon = True
+        check_thread.start()
 
     def _init_space(self):
         """
@@ -137,6 +155,7 @@ class Space:
                 life.row_location = life.row_location + vertical_movement
                 life.col_location = life.col_location + horizontal_movement
                 self.space[target_row][target_col] = life
+        self.show_space()
 
     def _get_wrapped_position(self, x, y):
         """
@@ -159,6 +178,7 @@ class Space:
         """
         wrapped_x, wrapped_y = self._get_wrapped_position(x, y)
         self.space[wrapped_x][wrapped_y] = value
+
 
 if __name__ == "__main__":
     # Example usage
