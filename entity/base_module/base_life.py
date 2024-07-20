@@ -94,6 +94,8 @@ class BaseLife:
         steps = step * 2 + 1
         for i in range(steps):
             for j in range(steps):
+                if left + j == self.col_location and top + i == self.row_location:
+                    continue
                 if self.space.check_valid(top + i, left + j):
                     if isinstance(self.space.space[top + i][left + j], life_type):
                         return True
