@@ -6,8 +6,8 @@ from entity.base_module.base_organization import BaseOrganization
 class PointLeg(BaseOrganization):
     def __init__(self, entity):
         self.entity = entity
-        # move direction
         super().__init__()
+        # move direction
         self.move_direction = [
             (1, 0),
             (-1, 0),
