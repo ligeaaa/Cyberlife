@@ -117,14 +117,6 @@ class BaseLife:
         """
         ...
 
-    def move(self):
-        """
-        The concrete move logic
-        :return:
-        """
-        random_number = random.randint(0, 3)
-        row_move, col_move = self.move_direction[random_number]
-        self.space.move_life(self, row_move, col_move)
 
     def _Quadratic_function(self, x, x1, x2):
         """

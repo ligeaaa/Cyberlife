@@ -26,8 +26,6 @@ class PointLife(BaseLife, threading.Thread):
         self.leg = PointLeg(self)
         self.sex = PointSex(self)
 
-
-
     def run(self):
         """
         Every random 1-5s move
@@ -49,7 +47,5 @@ class PointLife(BaseLife, threading.Thread):
             self.act_count += 1
             self.lock.release()
 
-
     def avoid(self):
         ...
-

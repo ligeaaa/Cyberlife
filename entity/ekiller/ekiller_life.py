@@ -3,12 +3,11 @@ import random
 import threading
 import time
 
-from common.msg import Message
-from common.probability import in_probability
-from constants.msg_type_constants import BORN
 from entity.base_module.base_life import BaseLife
 from colorama import Fore
 
+from entity.ekiller.organization.ekiller_leg import EKillerLeg
+from entity.ekiller.organization.ekiller_sex import EKillerSex
 from entity.point.point_life import PointLife
 from common.calculate_distance import euclidean_distance
 from common.move_way import hunt_move
@@ -26,6 +25,8 @@ class EKillerLife(BaseLife, threading.Thread):
                           lock=lock, energy=200, min_childbearing_age=40, max_childbearing_age=70)
         self.space = space
         self.logo = Fore.RED + name
+        self.leg = EKillerLeg(self)
+        self.sex = EKillerSex(self)
 
     def run(self):
         """
@@ -44,33 +45,16 @@ class EKillerLife(BaseLife, threading.Thread):
                 self.hunt()
             # otherwise, just move randomly
             else:
-                self.move()
+                self.leg.move(self.space)
             # if this life's energy is enough, then hava a baby
             if self.energy > 400:
-                self.breed()
+                self.sex.breed(EKillerLife)
             self.death()
             self.energy -= 5
             self.space.show_space()
             self.act_count += 1
             self.lock.release()
 
-    def breed(self, other_life: list[BaseLife] = None):
-        """
-        The concrete breed logic
-        """
-        if self.min_childbearing_age <= self.act_count:
-            probability = self.calculate_fertility_probability(self.act_count)
-            if not in_probability(probability - 0.2):
-                return
-            # ensure the coordinates are valid.
-            if self.space.check_valid(self.row_location - 1, self.col_location):
-                # if exists an empty location
-                if isinstance(self.space.space[self.row_location - 1][self.col_location], (int, PointLife)):
-                    new_life = EKillerLife(self.row_location - 1, self.col_location, str(random.randint(1, 9)),
-                                           self.space, self.lock)
-                    self.space.add_entity(new_life)
-                    self.energy -= 300
-                    self.space.client.send_information(Message(BORN, count=1))
 
     def hunt(self):
         """
@@ -91,4 +75,4 @@ class EKillerLife(BaseLife, threading.Thread):
         if nearest_point_life is not None:
             hunt_move(self, nearest_point_life, 3)
         else:
-            self.move()
+            self.leg.move(self.space)
